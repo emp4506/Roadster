@@ -59,7 +59,7 @@ def calculate_imparted_force(rpm):
     """
     Calculates the force imparted on the road by the tires. (equation 5)
     :param rpm: The RPM of the motor.
-    :return: Imparted force in Newtons.
+    :return:    Imparted force in Newtons.
     """
     if rpm <= max_motor_torque_regime:
         return (gear_reduction * max_motor_torque) / in_to_m(
@@ -80,8 +80,8 @@ def calculate_imparted_force(rpm):
 def calculate_rpm(velocity):
     """
     Calculates the RPM of the motor. (Equation 4)
-    :param velocity: The velocity of the car.
-    :return: The rpm of the motor at the velocity the car is traveling at.
+    :param velocity:    The velocity of the car.
+    :return:            The rpm of the motor at the velocity the car is traveling at.
     """
     return (60 * gear_reduction * velocity) / (2 * pi * in_to_m(tire_radius))
 
@@ -90,8 +90,8 @@ def calculate_force(velocity):
     """
     This calculates the force pushing the car forward limited by max static
     friction.
-    :param velocity: The velocity of the car
-    :return: The calculated force.
+    :param velocity:    The velocity of the car.
+    :return:            The calculated force.
     """
     return min((static_friction * mass * gravity),
                calculate_imparted_force(calculate_rpm(velocity)))
@@ -101,8 +101,8 @@ def calculate_aerodynamic_drag(velocity):
     """
     Calculates the aerodynamic drag of the car. (second part of inside the
     parenthesis of equation 3)
-    :param velocity: The velocity of the car/
-    :return: The aerodynamic drag of the car.
+    :param velocity:    The velocity of the car.
+    :return:            The aerodynamic drag of the car.
     """
     return 0.5 * (air_density * drag_coefficient * surface_area * (velocity ** 2))
 
@@ -110,8 +110,8 @@ def calculate_aerodynamic_drag(velocity):
 def calculate_acceleration(velocity):
     """
     Calculates the acceleration of the car. (Equation 3)
-    :param velocity: The velocity of the car.
-    :return: The acceleration of the car.
+    :param velocity:    The velocity of the car.
+    :return:            The acceleration of the car.
     """
     return (calculate_force(velocity) - calculate_aerodynamic_drag(velocity)) / mass
 
@@ -119,7 +119,7 @@ def calculate_acceleration(velocity):
 def calculate_velocity():
     """
     This calculates the velocity of the car using Euler's method.
-    :return: A dictionary with the velocity at each time_step
+    :return: A dictionary with the velocity at each time_step.
     """
     x, y = [0], [0]
     current_time = 0.01
@@ -152,8 +152,8 @@ def compare_values(y):
 def calculate_rsme(y):
     """
     This calculates the RSME.
-    :param y: The velocities list I created.
-    :return: The rsme value.
+    :param y:   The velocities list I created.
+    :return:    The rsme value.
     """
     total_value = 0
     for i in range(len(zeperfs_x)):

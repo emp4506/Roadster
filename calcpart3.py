@@ -1,8 +1,8 @@
 """
-file: calcpart3.py
-description: Predicts the velocity of the Tesla Roadster
-language: python3
-author: Evan Prizel (emp4506)
+File: calcpart3.py
+Description: Predicts the velocity of the Tesla Roadster
+Language: python3
+Author: Evan Prizel (emp4506)
 """
 
 import math
@@ -11,21 +11,21 @@ from math import pi
 from HelperFunctions import *
 
 # p100d constants
-gravity = 9.81  # (g) m/s^2
-air_density = 1.2041  # (p) kg/m^3
-mass = 2000  # (m) kg
-drag_coefficient = 0.36  # (C (sub) D)
-tire_radius = 14.35  # (r) in
-static_friction = 1.27  # (u (sub) s)
-surface_area = 2.072  # (A) m^2
-gear_reduction = 9.325  # (G)
-max_motor_torque = 1072  # (T (sub) max) Nm
-max_motor_power = 1000  # (P (sub) max) kW
+gravity = 9.81                  # (g) m/s^2
+air_density = 1.2041            # (p) kg/m^3
+mass = 2000                     # (m) kg
+drag_coefficient = 0.36         # (C (sub) D)
+tire_radius = 14.35             # (r) in
+static_friction = 1.27          # (u (sub) s)
+surface_area = 2.072            # (A) m^2
+gear_reduction = 9.325          # (G)
+max_motor_torque = 1072         # (T (sub) max) Nm
+max_motor_power = 1000          # (P (sub) max) kW
 max_motor_torque_regime = 8907  # (R (sub) 1) rpm
-max_motor_power_regime = 8907  # (R (sub) 2) rpm
-max_velocity = 250  # (v (sub) max) mph
-max_motor_rpm = 27690  # (R (sub) max) rpm
-time_step = 0.01  # (delta t) s
+max_motor_power_regime = 8907   # (R (sub) 2) rpm
+max_velocity = 250              # (v (sub) max) mph
+max_motor_rpm = 27690           # (R (sub) max) rpm
+time_step = 0.01                # (delta t) s
 
 # graph constants
 x_min = 1.3
@@ -59,8 +59,8 @@ def calculate_imparted_force(rpm, t):
     """
     Calculates the force imparted on the road by the tires. (equation 5)
     :param rpm: The RPM of the motor.
-    :param t: The tunable factor.
-    :return: Imparted force in Newtons.
+    :param t:   The tunable factor.
+    :return:    Imparted force in Newtons.
     """
     if rpm <= max_motor_torque_regime:
         return (gear_reduction * max_motor_torque) / in_to_m(
@@ -80,8 +80,8 @@ def tunable_factor(rpm, t):
     """
     This calculates the torque factor for the motor.
     :param rpm: The rpm of the motor.
-    :param t: the tunable factor.
-    :return: the torque.
+    :param t:   The tunable factor.
+    :return:    The torque.
     """
     return 1 - ((rpm - max_motor_torque_regime) / (t * max_motor_rpm))
 
@@ -89,8 +89,8 @@ def tunable_factor(rpm, t):
 def calculate_rpm(velocity):
     """
     Calculates the RPM of the motor. (Equation 4)
-    :param velocity: The velocity of the car.
-    :return: The rpm of the motor at the velocity the car is traveling at.
+    :param velocity:    The velocity of the car.
+    :return:            The rpm of the motor at the velocity the car is traveling at.
     """
     return (60 * gear_reduction * velocity) / (2 * pi * in_to_m(tire_radius))
 
@@ -99,9 +99,9 @@ def calculate_force(velocity, t):
     """
     This calculates the force pushing the car forward limited by max static
     friction.
-    :param velocity: The velocity of the car
-    :param t: The tunable factor.
-    :return: The calculated force.
+    :param velocity:    The velocity of the car.
+    :param t:           The tunable factor.
+    :return:            The calculated force.
     """
     return min((static_friction * mass * gravity),
                calculate_imparted_force(calculate_rpm(velocity), t))
@@ -111,8 +111,8 @@ def calculate_aerodynamic_drag(velocity):
     """
     Calculates the aerodynamic drag of the car. (second part of inside the
     parenthesis of equation 3)
-    :param velocity: The velocity of the car.
-    :return: The aerodynamic drag of the car.
+    :param velocity:    The velocity of the car.
+    :return:            The aerodynamic drag of the car.
     """
     return 0.5 * (air_density * drag_coefficient * surface_area * (velocity ** 2))
 
@@ -121,8 +121,8 @@ def calculate_acceleration(velocity, t):
     """
     Calculates the acceleration of the car. (Equation 3)
     :param velocity: The velocity of the car.
-    :param t: The tunable factor.
-    :return: The acceleration of the car.
+    :param t:   The tunable factor.
+    :return:    The acceleration of the car.
     """
     return (calculate_force(velocity, t) - calculate_aerodynamic_drag(velocity)) / mass
 
@@ -130,8 +130,8 @@ def calculate_acceleration(velocity, t):
 def calculate_velocity(t):
     """
     This calculates the velocity of the car using Euler's method.
-    :param t: The tunable factor.
-    :return: A dictionary with the velocity at each time_step
+    :param t:   The tunable factor.
+    :return:    A dictionary with the velocity at each time_step.
     """
     x, y = [0], [0]
     current_time = 0.01
@@ -164,8 +164,8 @@ def compare_values(y):
 def calculate_rsme(y):
     """
     This calculates the RSME.
-    :param y: The velocities list I created.
-    :return: The rsme value.
+    :param y:   The velocities list I created.
+    :return:    The rsme value.
     """
     total_value = 0
     for i in range(len(zeperfs_x)):
@@ -180,8 +180,10 @@ def main():
     chiron.
     """
     make_plot()
+
     t = 1.55
     x, y = calculate_velocity(t)
+
     plt.plot(x, y)
     plt.scatter(zeperfs_x, zeperfs_y)
     plt.show()
